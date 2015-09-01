@@ -17,7 +17,7 @@
         <ImageView
             android:layout_width="match_parent"
             android:layout_height="200dp"
-            android:id="@+id/photo"
+            android:id="@+id/topimg"
             android:layout_alignParentLeft="true"
             android:layout_alignParentTop="true"
             android:src="@drawable/ulmonoimgremoveaftertesting"
@@ -29,7 +29,7 @@
             android:layout_height="wrap_content"
             android:text="OPEN CARD"
             android:id="@+id/textView"
-            android:layout_below="@id/photo"
+            android:layout_below="@id/topimg"
             android:layout_alignParentRight="true"
             android:layout_margin="15dp"
             android:textColor="#40919e"

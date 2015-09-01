@@ -1,6 +1,7 @@
 package ulmon.task.com.topplaces;
 
 import android.app.Activity;
+import android.content.Context;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -13,6 +14,7 @@ import com.android.volley.RequestQueue;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.VolleyLog;
+import com.android.volley.toolbox.ImageLoader;
 import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
@@ -21,16 +23,23 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
 
 public class MainActivity extends Activity {
 
-    RequestQueue requestQueue ;
+    private RequestQueue requestQueue ;
+    private VolleySingleton volleySingleton;
+    private ImageLoader imageLoader;
     private String URL ="https://hub.ulmon.com/rest/map/discovery?access_token=C3AE7&installation_uuid=6fy&device=x86_64";
     JSONObject params ;
-    public List<TopImage> TopImageList = new LinkedList<TopImage>();
+    TopImage topImage;
+    private CardAdapter cardAdapter;
+
+
+
 
 
 
@@ -39,17 +48,20 @@ public class MainActivity extends Activity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+        volleySingleton = VolleySingleton.getInstance();
+        requestQueue = volleySingleton.getRequestQueue();
 
-
-
-        requestQueue = Volley.newRequestQueue(this);
         makeJsonRequest();
+
 
         RecyclerView mRecyclerView = (RecyclerView) findViewById(R.id.cardList);
         mRecyclerView.setHasFixedSize(true);
         LinearLayoutManager mLayoutManager = new LinearLayoutManager(this);
         mLayoutManager.setOrientation(LinearLayoutManager.VERTICAL);
         mRecyclerView.setLayoutManager(mLayoutManager);
+
+        cardAdapter = new CardAdapter(getBaseContext());
+        mRecyclerView.setAdapter(cardAdapter);
     }
 
     public void makeJsonRequest(){
@@ -73,13 +85,18 @@ public class MainActivity extends Activity {
                     JSONArray imagesArr = returnOBJ.getJSONArray("images");
 
 
-                    TopImage topImage = new TopImage();
+                    topImage = new TopImage();
                     topImage.urlPreview = topimageOBJ.getString("urlPreview");
                     topImage.urlLarge = topimageOBJ.getString("urlLarge");
+
+                    cardAdapter.setTopImage(topImage);
+                    Log.e("url response", topImage.urlPreview);
+
 
                 }catch (JSONException e) {
                     e.printStackTrace();
                 }
+
 
             }
 
@@ -90,6 +107,7 @@ public class MainActivity extends Activity {
             }
         });
         requestQueue.add(jsonObjectRequest);
+
     }
 
     @Override
