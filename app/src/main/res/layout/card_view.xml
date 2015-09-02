@@ -19,7 +19,6 @@
             android:id="@+id/topimg"
             android:layout_alignParentLeft="true"
             android:layout_alignParentTop="true"
-            android:src="@drawable/ulmonoimgremoveaftertesting"
             android:scaleType="fitXY"/>
 
 

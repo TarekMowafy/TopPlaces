@@ -20,28 +20,34 @@ public class CardAdapter extends RecyclerView.Adapter<CardAdapter.ViewHolder> {
     private VolleySingleton volleySingleton;
     private ImageLoader imageLoader;
     private LayoutInflater layoutInflater;
-    private TopImage images;
+    private TopImage topImages;
+    private ArrayList<POIS> poisArrayList;
+    private ArrayList<Images> imagesArrayList;
+    View view;
 
 
-    public  CardAdapter(Context context,TopImage imagesObj){
+    public  CardAdapter(Context context,TopImage imagesObj, ArrayList<POIS> poisAL, ArrayList<Images> imagesAL){
+
         layoutInflater = LayoutInflater.from(context);
         volleySingleton = VolleySingleton.getInstance();
         imageLoader = volleySingleton.getImageLoader();
-        images = new TopImage();
-        images = imagesObj;
+        topImages = new TopImage();
+        topImages = imagesObj;
 
+        poisArrayList = new ArrayList<POIS>();
+        poisArrayList = poisAL;
+
+        imagesArrayList = new ArrayList<Images>();
+        imagesArrayList = imagesAL;
 
     }
-
 
     @Override
     public CardAdapter.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         // create a new view
         View cardLayoutView = layoutInflater.inflate(R.layout.card_view, parent, false);
 
-
         // create ViewHolder
-
         ViewHolder viewHolder = new ViewHolder(cardLayoutView);
         return viewHolder;
     }
@@ -49,8 +55,7 @@ public class CardAdapter extends RecyclerView.Adapter<CardAdapter.ViewHolder> {
     @Override
     public void onBindViewHolder(final CardAdapter.ViewHolder holder, int position) {
 
-        String urlThumbnail = images.urlPreview;
-
+        String urlThumbnail = topImages.urlPreview;
         imageLoader.get(urlThumbnail, new ImageLoader.ImageListener() {
 
             @Override
@@ -68,10 +73,18 @@ public class CardAdapter extends RecyclerView.Adapter<CardAdapter.ViewHolder> {
 
     public static class ViewHolder extends RecyclerView.ViewHolder{
 
-         ImageView thumbnail;
+        ImageView thumbnail;
+
         public ViewHolder(View itemView){
             super(itemView);
             thumbnail = (ImageView) itemView.findViewById(R.id.topimg);
+
+            itemView.setOnClickListener(new View.OnClickListener(){
+                @Override
+                public void onClick(View v){
+
+                }
+            });
         }
     }
 
@@ -80,4 +93,6 @@ public class CardAdapter extends RecyclerView.Adapter<CardAdapter.ViewHolder> {
     public int getItemCount() {
         return 1;
     }
+
+
 }

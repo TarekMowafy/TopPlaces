@@ -3,6 +3,7 @@ package ulmon.task.com.topplaces;
 import android.app.Activity;
 import android.content.Context;
 import android.os.Bundle;
+import android.support.v7.app.ActionBar;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
@@ -38,6 +39,8 @@ public class MainActivity extends Activity {
     public TopImage topImage;
     private CardAdapter cardAdapter;
     private  RecyclerView mRecyclerView;
+    ArrayList<POIS> poisArrayList;
+    ArrayList<Images> imagesArrayList;
 
 
 
@@ -45,6 +48,7 @@ public class MainActivity extends Activity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        getActionBar().setDisplayOptions(ActionBar.DISPLAY_HOME_AS_UP|ActionBar.DISPLAY_SHOW_TITLE);
 
         volleySingleton = VolleySingleton.getInstance();
         requestQueue = volleySingleton.getRequestQueue();
@@ -78,10 +82,35 @@ public class MainActivity extends Activity {
 
                 try{
                     JSONObject returnOBJ = response.getJSONObject("return");
-                    JSONObject topimageOBJ = returnOBJ.getJSONObject("topImage");
-                    JSONArray poisArr = returnOBJ.getJSONArray("pois");
-                    JSONArray imagesArr = returnOBJ.getJSONArray("images");
 
+                    //Parsing POIS response into POIS Object
+                    JSONArray poisArr = returnOBJ.getJSONArray("pois");
+                    poisArrayList = new ArrayList<POIS>();
+                    for (int i = 0;i <poisArr.length();i++){
+                        JSONObject poisObj = poisArr.getJSONObject(i);
+                        POIS pois = new POIS();
+                        pois.uniqueID = poisObj.getInt("uniqueId");
+                        pois.orderIndex = poisObj.getInt("orderIndex");
+                        pois.recMessage = poisObj.getString("recMessage");
+
+                        poisArrayList.add(i,pois);
+                    }
+
+                    //Parsing Images Response into Images Object
+                    JSONArray imagesArr = returnOBJ.getJSONArray("images");
+                    imagesArrayList = new ArrayList<Images>();
+                    for (int y=0;y<imagesArr.length();y++){
+                        JSONObject imagesObj = imagesArr.getJSONObject(y);
+                        Images images = new Images();
+                        images.uniqueID = imagesObj.getInt("uniqueId");
+                        images.urlLarge = imagesObj.getString("urlLarge");
+
+                        imagesArrayList.add(y, images);
+                    }
+
+
+                    //Parsing Top Image response into TopImage Object
+                    JSONObject topimageOBJ = returnOBJ.getJSONObject("topImage");
                     topImage = new TopImage();
                     topImage.urlPreview = topimageOBJ.getString("urlPreview");
                     topImage.urlLarge = topimageOBJ.getString("urlLarge");
