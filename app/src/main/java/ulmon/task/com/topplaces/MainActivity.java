@@ -35,11 +35,9 @@ public class MainActivity extends Activity {
     private ImageLoader imageLoader;
     private String URL ="https://hub.ulmon.com/rest/map/discovery?access_token=C3AE7&installation_uuid=6fy&device=x86_64";
     JSONObject params ;
-    TopImage topImage;
+    public TopImage topImage;
     private CardAdapter cardAdapter;
-
-
-
+    private  RecyclerView mRecyclerView;
 
 
 
@@ -51,17 +49,17 @@ public class MainActivity extends Activity {
         volleySingleton = VolleySingleton.getInstance();
         requestQueue = volleySingleton.getRequestQueue();
 
+        mRecyclerView = (RecyclerView) findViewById(R.id.cardList);
+
         makeJsonRequest();
 
-
-        RecyclerView mRecyclerView = (RecyclerView) findViewById(R.id.cardList);
         mRecyclerView.setHasFixedSize(true);
         LinearLayoutManager mLayoutManager = new LinearLayoutManager(this);
         mLayoutManager.setOrientation(LinearLayoutManager.VERTICAL);
         mRecyclerView.setLayoutManager(mLayoutManager);
 
-        cardAdapter = new CardAdapter(getBaseContext());
-        mRecyclerView.setAdapter(cardAdapter);
+
+
     }
 
     public void makeJsonRequest(){
@@ -84,19 +82,17 @@ public class MainActivity extends Activity {
                     JSONArray poisArr = returnOBJ.getJSONArray("pois");
                     JSONArray imagesArr = returnOBJ.getJSONArray("images");
 
-
                     topImage = new TopImage();
                     topImage.urlPreview = topimageOBJ.getString("urlPreview");
                     topImage.urlLarge = topimageOBJ.getString("urlLarge");
 
-                    cardAdapter.setTopImage(topImage);
-                    Log.e("url response", topImage.urlPreview);
-
+                    Log.e("image url", topImage.urlPreview);
+                    cardAdapter = new CardAdapter(getBaseContext(),topImage);
+                    mRecyclerView.setAdapter(cardAdapter);
 
                 }catch (JSONException e) {
                     e.printStackTrace();
                 }
-
 
             }
 
@@ -107,6 +103,7 @@ public class MainActivity extends Activity {
             }
         });
         requestQueue.add(jsonObjectRequest);
+
 
     }
 

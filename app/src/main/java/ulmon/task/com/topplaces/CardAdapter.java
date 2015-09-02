@@ -8,6 +8,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.Toast;
 
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.ImageLoader;
@@ -19,23 +20,19 @@ public class CardAdapter extends RecyclerView.Adapter<CardAdapter.ViewHolder> {
     private VolleySingleton volleySingleton;
     private ImageLoader imageLoader;
     private LayoutInflater layoutInflater;
-    private TopImage listOfImages = new TopImage() ;
+    private TopImage images;
 
 
-
-
-    public  CardAdapter(Context context){
+    public  CardAdapter(Context context,TopImage imagesObj){
         layoutInflater = LayoutInflater.from(context);
         volleySingleton = VolleySingleton.getInstance();
         imageLoader = volleySingleton.getImageLoader();
-
-    }
-
-    public void setTopImage(TopImage listOfImages){
-        this.listOfImages= listOfImages;
+        images = new TopImage();
+        images = imagesObj;
 
 
     }
+
 
     @Override
     public CardAdapter.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
@@ -52,7 +49,7 @@ public class CardAdapter extends RecyclerView.Adapter<CardAdapter.ViewHolder> {
     @Override
     public void onBindViewHolder(final CardAdapter.ViewHolder holder, int position) {
 
-        String urlThumbnail = listOfImages.urlPreview;
+        String urlThumbnail = images.urlPreview;
 
         imageLoader.get(urlThumbnail, new ImageLoader.ImageListener() {
 

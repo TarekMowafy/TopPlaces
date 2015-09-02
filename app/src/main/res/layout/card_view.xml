@@ -5,14 +5,13 @@
     android:id="@+id/placeCard"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:elevation="8dp"
-    android:layout_margin="8dp">
+    android:elevation="5dp">
 
 
 
     <RelativeLayout
-        android:layout_width="fill_parent"
-        android:layout_height="wrap_content">
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
 
         <ImageView
             android:layout_width="match_parent"
@@ -21,7 +20,7 @@
             android:layout_alignParentLeft="true"
             android:layout_alignParentTop="true"
             android:src="@drawable/ulmonoimgremoveaftertesting"
-            android:scaleType="center"/>
+            android:scaleType="fitXY"/>
 
 
         <TextView
